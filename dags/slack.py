@@ -32,7 +32,7 @@ class MySlackAPIOperator(SlackAPIOperator):
         self.api_params = api_params
     
     def execute(self, context):
-        self.log.info('Context is ' + context)
+        self.log.info('Context is ' + str(context))
         if not self.api_params:
             self.construct_api_call_params()
         slack = SlackHook(token=self.token, slack_conn_id=self.slack_conn_id)
