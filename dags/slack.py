@@ -44,4 +44,5 @@ class MySlackAPIOperator(SlackAPIOperator):
         self.api_params['username'] = "Amin Dorostanian"
         self.api_params['channel'] = 'General'
         slack = SlackHook(token=self.token, slack_conn_id=self.slack_conn_id)
+        self.method = 'chat.postMessage'
         slack.call(self.method, self.api_params)
