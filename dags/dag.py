@@ -7,7 +7,7 @@ from airflow.operators.dummy_operator import DummyOperator
 from airflow.utils.trigger_rule import TriggerRule
 from bq import BigQueryGetDataOperator
 from airflow.operators.slack_operator import SlackAPIOperator
-
+from airflow.operators.python_operator import PythonOperator
 import random
 
 dag = DAG(
@@ -42,20 +42,20 @@ FROM (
     5 )
 """
 
-
-
-
 get_data = BigQueryGetDataOperator(
     task_id='get_data_from_bq',
     sql=QUERY
 )
 
-
-
-publish_to_slack = SlackAPIOperator(
-        token="xoxp-559854890739-559228586160-560304790661-ae28d681f2f1026dd05cfc0a42f27d89",
-        task_id='publish',
-        text='hello',
-        channel='General',  # Replace with your Slack username
-        username='airflow'
+pull_data = PythonOperator(
+    task_id= 'pull_data',
+    python_callable = get_data,
+    provide_context=True,
+    dag=dag,
 )
+
+publish_to_slack = MySlackAPIOperator(
+    token="xoxp-559854890739-559228586160-561116849751-2c717700dd7b7a197765ac21770c9c08"
+)
+
+pull_data >> publish_to_slack
