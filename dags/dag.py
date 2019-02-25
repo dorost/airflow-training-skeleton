@@ -54,4 +54,4 @@ publish_to_slack = MySlackAPIOperator(
     task_id = "publish_it"
 )
 
-pull_data >> publish_to_slack
+get_data >> publish_to_slack

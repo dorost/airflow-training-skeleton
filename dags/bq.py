@@ -53,7 +53,7 @@ class BigQueryGetDataOperator(BaseOperator):
         self.log.info('Fetching Data from:')
         self.log.info('Query: %s', self.sql)
 
-        hook = BigQueryHook(bigquery_conn_id=self.bigquery_conn_id,
+        hook = BigQueryHook(bigquery_conn_id=self.bigquery_conn_id, use_legacy_sql=False,
                             delegate_to=self.delegate_to)
 
         conn = hook.get_conn()
