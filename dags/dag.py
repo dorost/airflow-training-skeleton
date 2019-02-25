@@ -47,6 +47,7 @@ FROM (
 get_data = BigQueryGetDataOperator(
     task_id='get_data_from_bq',
     sql=QUERY,
+    provide_context=True,
     dag=dag
 )
 
