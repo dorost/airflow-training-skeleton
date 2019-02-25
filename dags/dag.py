@@ -50,7 +50,8 @@ get_data = BigQueryGetDataOperator(
 
 
 publish_to_slack = MySlackAPIOperator(
-    token="xoxp-559854890739-559228586160-561116849751-2c717700dd7b7a197765ac21770c9c08"
+    token="xoxp-559854890739-559228586160-561116849751-2c717700dd7b7a197765ac21770c9c08",
+    task_id = "publish_it"
 )
 
 pull_data >> publish_to_slack
