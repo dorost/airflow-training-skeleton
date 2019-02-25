@@ -12,13 +12,13 @@ dag = DAG(
 )
 
 prints_started_job = BashOperator(
-    task_id="print_exec_date", bash_command="echo {{ execution_date }}", dag=dag
+    task_id="prints_started_job", bash_command="echo {{ execution_date }}", dag=dag
 )
 
 
 
 prints_logs_job = BashOperator(
-    task_id="print_exec_date", bash_command="echo 'I did the job now'", dag=dag
+    task_id="prints_logs_job", bash_command="echo 'I did the job now'", dag=dag
 )
 
 prints_started_job >> prints_logs_job
