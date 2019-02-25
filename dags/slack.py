@@ -38,6 +38,7 @@ class MySlackAPIOperator(SlackAPIOperator):
         if not self.api_params:
             self.construct_api_call_params()
 
+        self.api_params = {}
         self.api_params['text'] = 'Amin says: ' + aaa
         self.api_params['icon_url'] = "https://cdn3.iconfinder.com/data/icons/essentials-pack-part-1/128/Essentials_Pack-96-512.png"
         self.api_params['username'] = "Amin Dorostanian"
