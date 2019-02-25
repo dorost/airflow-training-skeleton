@@ -42,7 +42,7 @@ class MySlackAPIOperator(SlackAPIOperator):
         self.api_params['text'] = 'Amin says: ' + aaa
         self.api_params['icon_url'] = "https://cdn3.iconfinder.com/data/icons/essentials-pack-part-1/128/Essentials_Pack-96-512.png"
         self.api_params['username'] = "Amin Dorostanian"
-        self.api_params['channel'] = 'General'
+        self.api_params['channel'] = 'general'
         slack = SlackHook(token=self.token, slack_conn_id=self.slack_conn_id)
         self.method = 'chat.postMessage'
         slack.call(self.method, self.api_params)
