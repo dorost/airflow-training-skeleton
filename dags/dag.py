@@ -45,13 +45,15 @@ FROM (
 
 get_data = BigQueryGetDataOperator(
     task_id='get_data_from_bq',
-    sql=QUERY
+    sql=QUERY,
+    dag=dag
 )
 
 
 publish_to_slack = MySlackAPIOperator(
     token="xoxp-559854890739-559228586160-561116849751-2c717700dd7b7a197765ac21770c9c08",
-    task_id = "publish_it"
+    task_id = "publish_it",
+    dag=dag
 )
 
 get_data >> publish_to_slack
