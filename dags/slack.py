@@ -34,8 +34,12 @@ class MySlackAPIOperator(SlackAPIOperator):
 
         data = context['task_instance'].xcom_pull(task_ids='get_data_from_bq')
         self.log.info('Context is ' + str(data))
+        aaa = ','.join( [str(v[0]) for v in data])
+        self.api_params['text'] = 'Amin says: ' + aaa
+        self.api_params['icon_url'] = "https://cdn3.iconfinder.com/data/icons/essentials-pack-part-1/128/Essentials_Pack-96-512.png"
+        self.api_params['username'] = "Amin Dorostanian"
+        self.api_params['channel'] = 'General'
         if not self.api_params:
             self.construct_api_call_params()
         slack = SlackHook(token=self.token, slack_conn_id=self.slack_conn_id)
-        self.api_params['text'] = 'Amin says: ' + str(data)
         slack.call(self.method, self.api_params)
