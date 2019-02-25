@@ -9,6 +9,7 @@ from bq import BigQueryGetDataOperator
 from airflow.operators.slack_operator import SlackAPIOperator
 from airflow.operators.python_operator import PythonOperator
 import random
+from slack import MySlackAPIOperator
 
 dag = DAG(
     dag_id="hello_airflow",
