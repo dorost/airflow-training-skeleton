@@ -5,6 +5,7 @@ from airflow.operators.email_operator import EmailOperator
 from airflow.operators.python_operator import BranchPythonOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.utils.trigger_rule import TriggerRule
+import random
 
 dag = DAG(
     dag_id="hello_airflow",
