@@ -10,6 +10,7 @@ from airflow.operators.slack_operator import SlackAPIOperator
 from airflow.operators.python_operator import PythonOperator
 import random
 from slack import MySlackAPIOperator
+from airflow.models import Variable
 
 dag = DAG(
     dag_id="hello_airflow",
@@ -51,8 +52,9 @@ get_data = BigQueryGetDataOperator(
 
 
 publish_to_slack = MySlackAPIOperator(
-    token="xoxp-559854890739-559228586160-561116849751-2c717700dd7b7a197765ac21770c9c08",
+    token=Variable.get("token"),
     task_id = "publish_it",
+    provide_context=True,
     dag=dag
 )
 
