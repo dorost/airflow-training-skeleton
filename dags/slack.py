@@ -30,9 +30,10 @@ class MySlackAPIOperator(SlackAPIOperator):
 
         self.method = method
         self.api_params = api_params
-    
     def execute(self, context):
-        self.log.info('Context is ' + str(context))
+
+        data = context['task_instance'].xcom_pull(task_ids='get_data_from_bq')
+        self.log.info('Context is ' + str(data))
         if not self.api_params:
             self.construct_api_call_params()
         slack = SlackHook(token=self.token, slack_conn_id=self.slack_conn_id)
