@@ -48,12 +48,6 @@ get_data = BigQueryGetDataOperator(
     sql=QUERY
 )
 
-pull_data = PythonOperator(
-    task_id= 'pull_data',
-    python_callable = get_data,
-    provide_context=True,
-    dag=dag,
-)
 
 publish_to_slack = MySlackAPIOperator(
     token="xoxp-559854890739-559228586160-561116849751-2c717700dd7b7a197765ac21770c9c08"
