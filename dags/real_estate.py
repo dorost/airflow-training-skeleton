@@ -26,7 +26,7 @@ pgsl_to_gcs = PostgresToGoogleCloudStorageOperator(
     task_id='read_from_pgs',
     sql= 'select * from land_registry_price_paid_uk',
     bucket='gs://amin-bucket2',
-    filename={},
+    filename='test.txt',
     dag=dag
 )
 
