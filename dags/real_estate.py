@@ -59,6 +59,7 @@ load_into_bigquery = DataFlowPythonOperator(
         'project': 'airflowbolcom-a2262958ad7773ed',
         'project_id': 'airflowbolcom-a2262958ad7773ed',
         'bucket': 'amin-bucket2',
+        'runner': 'DataflowRunner',
         'name': '{{ task_instance_key_str }}'
     },
     py_file="gs://amin-bucket2/dataflow_job.py",
