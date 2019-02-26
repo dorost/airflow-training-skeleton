@@ -15,7 +15,7 @@ from airflow.contrib.operators.dataflow_operator import DataFlowPythonOperator
 
 
 dag = DAG(
-    dag_id="real_estate_job_2",
+    dag_id="real_estate",
     default_args={
         "owner": "godatadriven",
         "start_date":  airflow.utils.dates.days_ago(30),
@@ -33,14 +33,16 @@ pgsl_to_gcs = PostgresToGoogleCloudStorageOperator(
     filename='data/{{ ds }}/real_estate.json',
     dag=dag
 )
-
+currency_jobs = []
 for currency in ['EUR', 'USD']:
-    HttpToGcsOperator(
-        task_id= 'get_rates_' + currency,
-        endpoint= '/convert-currency?date={{ ds }}&from=GBP&to=' + currency,
-        gcs_path = 'currency/{{ ds }}/' + currency + '.json',
-        gcs_bucket= 'amin-bucket2',
-        dag=dag
+        currency_jobs.append(
+            HttpToGcsOperator(
+            task_id= 'get_rates_' + currency,
+            endpoint= '/convert-currency?date={{ ds }}&from=GBP&to=' + currency,
+            gcs_path = 'currency/{{ ds }}/' + currency + '.json',
+            gcs_bucket= 'amin-bucket2',
+            dag=dag
+        )
     )
 
 
