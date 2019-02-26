@@ -16,7 +16,7 @@ dag = DAG(
     dag_id="real_estate_job",
     default_args={
         "owner": "godatadriven",
-        "start_date": datetime.strptime('2019-01-01', '%Y-%m-%d'),
+        "start_date":  airflow.utils.dates.days_ago(30),
     },
 )
 prints_started_job = BashOperator(
