@@ -11,6 +11,8 @@ from airflow_training.operators.postgres_to_gcs import PostgresToGoogleCloudStor
 from datetime import datetime
 from dateutil.parser import parse
 from airflow_training.operators.httpgcs import HttpToGcsOperator
+from airflow.contrib.operators.dataflow_operator import DataFlowPythonOperator
+
 
 dag = DAG(
     dag_id="real_estate_job_2",
@@ -40,6 +42,21 @@ http_gcs = HttpToGcsOperator(
     dag=dag
 )
 
+load_into_bigquery = DataFlowPythonOperator(
+    task_id="land_registry_prices_to_bigquery",
+    dataflow_default_options={
+        'region': "europe-west1",
+        'input': 'gs://amin-bucket2/*/*.json',
+        'table': 'amin',
+        'dataset': 'amin',
+        'project': 'airflowbolcom-a2262958ad7773ed',
+        'bucket': 'amin-bucket2',
+        'name': '{{ task_instance_key_str }}'
+    },
+    py_file="gs://amin-bucket2/dataflow_job.py",
+    dag=dag,
+)
 
-prints_started_job >> pgsl_to_gcs >> http_gcs
+
+prints_started_job >> pgsl_to_gcs >> http_gcs >> load_into_bigquery
 
