@@ -34,7 +34,7 @@ pgsl_to_gcs = PostgresToGoogleCloudStorageOperator(
 
 http_gcs = HttpToGcsOperator(
     task_id= 'get_rates',
-    endpoint= '"https://us-central1-umcg-cardio-ai.cloudfunctions.net/convert-currency?date={{ ds }}&from=GBP&to=EUR',
+    endpoint= '/convert-currency?date={{ ds }}&from=GBP&to=EUR',
     gcs_path = 'currency/{{ ds }}/rates.json',
     gcs_bucket= 'amin-bucket2',
     dag=dag
