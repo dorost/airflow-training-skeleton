@@ -5,7 +5,6 @@ from airflow.operators.email_operator import EmailOperator
 from airflow.operators.python_operator import BranchPythonOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.utils.trigger_rule import TriggerRule
-from airflow.operators.slack_operator import SlackAPIOperator
 from airflow.operators.python_operator import PythonOperator
 from airflow.models import Variable,Connection
 from airflow_training.operators.postgres_to_gcs import PostgresToGoogleCloudStorageOperator
@@ -14,7 +13,7 @@ dag = DAG(
     dag_id="real_estate_job",
     default_args={
         "owner": "godatadriven",
-        "start_date": airflow.utils.dates.days_ago(3),
+        "start_date": '2019-01-01',
     },
 )
 prints_started_job = BashOperator(
@@ -24,9 +23,9 @@ prints_started_job = BashOperator(
 
 pgsl_to_gcs = PostgresToGoogleCloudStorageOperator(
     task_id='read_from_pgs',
-    sql= 'select * from land_registry_price_paid_uk',
+    sql= "select * from land_registry_price_paid_uk where transfer_date = '{{ ds }}'",
     bucket='amin-bucket2',
-    filename='test.txt',
+    filename='data/{{ ds }}/real_estate.json',
     dag=dag
 )
 
