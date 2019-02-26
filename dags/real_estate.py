@@ -10,6 +10,8 @@ from airflow.models import Variable,Connection
 from airflow_training.operators.postgres_to_gcs import PostgresToGoogleCloudStorageOperator
 from datetime import datetime
 from dateutil.parser import parse
+from airflow_training.operators.httpgcs import HttpToGcsOperator
+
 dag = DAG(
     dag_id="real_estate_job",
     default_args={
@@ -30,4 +32,14 @@ pgsl_to_gcs = PostgresToGoogleCloudStorageOperator(
     dag=dag
 )
 
-prints_started_job >> pgsl_to_gcs
+http_gcs = HttpToGcsOperator(
+    task_id= 'get_rates',
+    endpoint= '"https://us-central1-umcg-cardio-ai.cloudfunctions.net/convert-currency?date={{ ds }}&from=GBP&to=EUR',
+    gcs_path = 'currency/{{ ds }}/rates.json',
+    gcs_bucket= 'amin-bucket2',
+    dag=dag
+)
+
+
+prints_started_job >> pgsl_to_gcs >> http_gcs
+

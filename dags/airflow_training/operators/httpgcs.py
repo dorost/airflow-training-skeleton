@@ -1,0 +1,46 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+from tempfile import NamedTemporaryFile
+from airflow.hooks.http_hook import HttpHook
+from airflow.models import BaseOperator
+from airflow.utils.decorators import apply_defaults
+from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
+
+
+class HttpToGcsOperator(BaseOperator):
+
+    template_fields = ('endpoint', 'gcs_path')
+    template_ext = ()
+    ui_color = '#f4a460'
+
+    @apply_defaults
+    def __init__(
+        self,
+        endpoint,
+        gcs_path,
+        gcs_bucket,
+        method='GET',
+        http_conn_id='http_default',
+        gcs_conn_id='google_cloud_default',
+        *args,
+        **kwargs
+        ):
+        super(HttpToGcsOperator, self).__init__(*args, **kwargs)
+        self.http_conn_id = http_conn_id
+        self.method = method
+        self.endpoint = endpoint
+        self.gcs_path = gcs_path
+        self.gcs_bucket = gcs_bucket
+        self.gcs_conn_id = gcs_conn_id
+
+    def execute(self, context):
+        http = HttpHook(self.method, http_conn_id=self.http_conn_id)
+        self.log.info('Calling HTTP method')
+        response = http.run(self.endpoint)
+        with NamedTemporaryFile() as tmp_file_handle:
+            tmp_file_handle.write(response.content)
+            tmp_file_handle.flush()
+            hook = \
+                GoogleCloudStorageHook(google_cloud_storage_conn_id=self.gcs_conn_id)
+            hook.upload(bucket=self.gcs_bucket, object=self.gcs_path,
+                        filename=tmp_file_handle.name)
