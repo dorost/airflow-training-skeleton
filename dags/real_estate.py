@@ -8,12 +8,13 @@ from airflow.utils.trigger_rule import TriggerRule
 from airflow.operators.python_operator import PythonOperator
 from airflow.models import Variable,Connection
 from airflow_training.operators.postgres_to_gcs import PostgresToGoogleCloudStorageOperator
+import datetime
 
 dag = DAG(
     dag_id="real_estate_job",
     default_args={
         "owner": "godatadriven",
-        "start_date": '2019-01-01',
+        "start_date": datetime.datetime.strptime('01012019', '%d%m%Y').date(),
     },
 )
 prints_started_job = BashOperator(
