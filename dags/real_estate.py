@@ -13,7 +13,7 @@ from dateutil.parser import parse
 from airflow_training.operators.httpgcs import HttpToGcsOperator
 
 dag = DAG(
-    dag_id="real_estate_job",
+    dag_id="real_estate_job_2",
     default_args={
         "owner": "godatadriven",
         "start_date":  airflow.utils.dates.days_ago(30),
