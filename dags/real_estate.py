@@ -51,9 +51,9 @@ load_into_bigquery = DataFlowPythonOperator(
     task_id="land_registry_prices_to_bigquery",
     dataflow_default_options={
         'region': "europe-west1",
-        'input': 'gs://amin-bucket2/*/*.json',
-        'temp_location': 'gs://amin-bucket2/temp/',
-        'staging_location': 'gs://amin-bucket2/staging/',
+        'input': 'gs://amin-bucket2/data/*/*.json',
+        'temp_location': 'gs://amin-bucket2/temp',
+        'staging_location': 'gs://amin-bucket2/staging',
         'table': 'amin',
         'dataset': 'amin',
         'project': 'airflowbolcom-a2262958ad7773ed',
