@@ -34,21 +34,24 @@ pgsl_to_gcs = PostgresToGoogleCloudStorageOperator(
     dag=dag
 )
 
-http_gcs = HttpToGcsOperator(
-    task_id= 'get_rates',
-    endpoint= '/convert-currency?date={{ ds }}&from=GBP&to=EUR',
-    gcs_path = 'currency/{{ ds }}/rates.json',
-    gcs_bucket= 'amin-bucket2',
-    dag=dag
-)
+for currency in ['EUR', 'USD']:
+    HttpToGcsOperator(
+        task_id= 'get_rates',
+        endpoint= '/convert-currency?date={{ ds }}&from=GBP&to=' + currency,
+        gcs_path = 'currency/{{ ds }}/' + currency + '.json',
+        gcs_bucket= 'amin-bucket2',
+        dag=dag
+    )
+
+
 
 load_into_bigquery = DataFlowPythonOperator(
     task_id="land_registry_prices_to_bigquery",
     dataflow_default_options={
         'region': "europe-west1",
         'input': 'gs://amin-bucket2/*/*.json',
-        'temp_location': 'gs://amin-bucket2/temp/file.temp',
-        'staging_location': 'gs://amin-bucket2/staging/file.x',
+        'temp_location': 'gs://amin-bucket2/temp/',
+        'staging_location': 'gs://amin-bucket2/staging/',
         'table': 'amin',
         'dataset': 'amin',
         'project': 'airflowbolcom-a2262958ad7773ed',
@@ -59,6 +62,4 @@ load_into_bigquery = DataFlowPythonOperator(
     dag=dag,
 )
 
-
-prints_started_job >> pgsl_to_gcs >> http_gcs >> load_into_bigquery
 
